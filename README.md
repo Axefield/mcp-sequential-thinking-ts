@@ -33,10 +33,10 @@ A Model Context Protocol (MCP) server that facilitates structured, progressive t
 ## Key Technologies
 
 - **Zod**: For data validation and serialization
+- **JSON**: For data storage and serialization
 - **proper-lockfile**: For thread-safe file access
 - **@modelcontextprotocol/sdk**: For Model Context Protocol integration
 - **pino**: For structured logging with pretty formatting
-- **yaml**: For configuration management
 - **uuid**: For unique identifier generation
 - **chalk**: For terminal styling and colors
 - **boxen**: For creating terminal boxes and borders

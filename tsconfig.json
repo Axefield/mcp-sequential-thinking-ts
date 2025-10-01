@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.build.json",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -13,7 +12,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true
   },
   "include": ["src", "bin", "tests"],
   "exclude": ["node_modules", "dist"]

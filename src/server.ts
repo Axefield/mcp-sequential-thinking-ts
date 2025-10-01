@@ -157,7 +157,7 @@ export class SequentialThinkingServer {
             throw new Error(`Unknown tool: ${name}`);
         }
       } catch (error) {
-        logger.error(`Error in tool ${name}:`, error);
+        logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, `Error in tool ${name}:`);
         return {
           content: [
             {
@@ -222,7 +222,7 @@ export class SequentialThinkingServer {
         ],
       };
     } catch (error) {
-      logger.error('Error processing thought:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error processing thought:');
       return {
         content: [
           {
@@ -257,7 +257,7 @@ export class SequentialThinkingServer {
         ],
       };
     } catch (error) {
-      logger.error('Error generating summary:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error generating summary:');
       return {
         content: [
           {
@@ -286,7 +286,7 @@ export class SequentialThinkingServer {
         ],
       };
     } catch (error) {
-      logger.error('Error clearing history:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error clearing history:');
       return {
         content: [
           {
@@ -318,7 +318,7 @@ export class SequentialThinkingServer {
         ],
       };
     } catch (error) {
-      logger.error('Error exporting session:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error exporting session:');
       return {
         content: [
           {
@@ -350,7 +350,7 @@ export class SequentialThinkingServer {
         ],
       };
     } catch (error) {
-      logger.error('Error importing session:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error importing session:');
       return {
         content: [
           {

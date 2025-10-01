@@ -13,11 +13,11 @@ export class ThoughtAnalyzer {
    * @param maxResults - Maximum number of related thoughts to return
    * @returns Related thoughts, sorted by relevance
    */
-  static findRelatedThoughts(
+  static async findRelatedThoughts(
     currentThought: ThoughtDataClass,
     allThoughts: ThoughtDataClass[],
     maxResults = 3
-  ): ThoughtDataClass[] {
+  ): Promise<ThoughtDataClass[]> {
     // Check if we're running in a test environment and handle test cases if needed
     if (process.env.NODE_ENV === 'test') {
       // Import test utilities only when needed to avoid circular imports
@@ -105,7 +105,7 @@ export class ThoughtAnalyzer {
       if (!stages[thought.stage]) {
         stages[thought.stage] = [];
       }
-      stages[thought.stage].push(thought);
+      stages[thought.stage]!.push(thought);
     }
 
     // Count tags - using a more readable approach with explicit steps
@@ -177,7 +177,7 @@ export class ThoughtAnalyzer {
 
       return { summary };
     } catch (error) {
-      logger.error('Error generating summary:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error generating summary:');
       return {
         summary: {
           totalThoughts: thoughts.length,
@@ -194,7 +194,7 @@ export class ThoughtAnalyzer {
    * @param allThoughts - All available thoughts for context
    * @returns Analysis results
    */
-  static analyzeThought(thought: ThoughtDataClass, allThoughts: ThoughtDataClass[]): Record<string, any> {
+  static async analyzeThought(thought: ThoughtDataClass, allThoughts: ThoughtDataClass[]): Promise<Record<string, any>> {
     // Check if we're running in a test environment
     let relatedThoughts: ThoughtDataClass[];
     let isFirstInStage: boolean;
@@ -216,7 +216,7 @@ export class ThoughtAnalyzer {
         }
       } else {
         // Find related thoughts using the normal method
-        relatedThoughts = ThoughtAnalyzer.findRelatedThoughts(thought, allThoughts);
+        relatedThoughts = await ThoughtAnalyzer.findRelatedThoughts(thought, allThoughts);
         
         // Calculate if this is the first thought in its stage
         const sameStageThoughts = allThoughts.filter(t => t.stage === thought.stage);
@@ -224,7 +224,7 @@ export class ThoughtAnalyzer {
       }
     } else {
       // Find related thoughts first
-      relatedThoughts = ThoughtAnalyzer.findRelatedThoughts(thought, allThoughts);
+      relatedThoughts = await ThoughtAnalyzer.findRelatedThoughts(thought, allThoughts);
       
       // Then calculate if this is the first thought in its stage
       const sameStageThoughts = allThoughts.filter(t => t.stage === thought.stage);

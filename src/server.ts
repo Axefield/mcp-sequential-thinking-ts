@@ -33,6 +33,13 @@ export class SequentialThinkingServer {
     this.setupToolHandlers();
   }
 
+  /**
+   * Initialize the server by setting up storage.
+   */
+  async initialize(): Promise<void> {
+    await this.storage.initialize();
+  }
+
   private setupToolHandlers(): void {
     // List available tools
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -208,7 +215,7 @@ export class SequentialThinkingServer {
       const allThoughts = this.storage.getAllThoughts();
 
       // Analyze the thought
-      const analysis = ThoughtAnalyzer.analyzeThought(thoughtData, allThoughts);
+      const analysis = await ThoughtAnalyzer.analyzeThought(thoughtData, allThoughts);
 
       // Log success
       logger.info(`Successfully processed thought #${args.thoughtNumber}`);
@@ -390,6 +397,7 @@ export class SequentialThinkingServer {
  */
 export async function startMcpServer(storageDir?: string): Promise<SequentialThinkingServer> {
   const server = new SequentialThinkingServer(storageDir);
+  await server.initialize();
   await server.start();
   return server;
 }

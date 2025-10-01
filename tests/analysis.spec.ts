@@ -49,15 +49,15 @@ describe('ThoughtAnalyzer', () => {
     allThoughts = [thought1, thought2, thought3, thought4];
   });
 
-  it('should find related thoughts by stage', () => {
-    const related = ThoughtAnalyzer.findRelatedThoughts(thought1, allThoughts);
+  it('should find related thoughts by stage', async () => {
+    const related = await ThoughtAnalyzer.findRelatedThoughts(thought1, allThoughts);
 
     // Should find thought4 which is in the same stage
     expect(related).toHaveLength(1);
     expect(related[0]).toBe(thought4);
   });
 
-  it('should find related thoughts by tags', () => {
+  it('should find related thoughts by tags', async () => {
     // Create a new thought with tags that match thought1 and thought2
     const newThought = new ThoughtDataClass({
       thought: 'New thought with climate tag',
@@ -70,7 +70,7 @@ describe('ThoughtAnalyzer', () => {
 
     const allThoughtsWithNew = [...allThoughts, newThought];
 
-    const related = ThoughtAnalyzer.findRelatedThoughts(newThought, allThoughtsWithNew);
+    const related = await ThoughtAnalyzer.findRelatedThoughts(newThought, allThoughtsWithNew);
 
     // Should find thought1 and thought2 which have the "climate" tag
     expect(related).toHaveLength(2);
@@ -96,8 +96,8 @@ describe('ThoughtAnalyzer', () => {
     expect(summary.summary.completionStatus).toBeDefined();
   });
 
-  it('should analyze a thought', () => {
-    const analysis = ThoughtAnalyzer.analyzeThought(thought1, allThoughts);
+  it('should analyze a thought', async () => {
+    const analysis = await ThoughtAnalyzer.analyzeThought(thought1, allThoughts);
 
     expect(analysis.thoughtAnalysis.currentThought.thoughtNumber).toBe(1);
     expect(analysis.thoughtAnalysis.currentThought.stage).toBe('Problem Definition');

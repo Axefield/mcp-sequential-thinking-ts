@@ -29,8 +29,16 @@ export class ThoughtStorage {
     this.currentSessionFile = path.join(this.storageDir, 'current_session.json');
     this.lockFile = path.join(this.storageDir, 'current_session.lock');
 
-    // Load existing session if available
-    this.loadSession();
+    // Initialize thoughtHistory as empty array
+    this.thoughtHistory = [];
+  }
+
+  /**
+   * Initialize the storage by loading existing session.
+   * This should be called after construction.
+   */
+  async initialize(): Promise<void> {
+    await this.loadSession();
   }
 
   private async loadSession(): Promise<void> {
@@ -41,7 +49,7 @@ export class ThoughtStorage {
       // Use the utility function to handle loading with proper error handling
       this.thoughtHistory = await loadThoughtsFromFile(this.currentSessionFile, this.lockFile);
     } catch (error) {
-      logger.error('Error loading session:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error loading session:');
       this.thoughtHistory = [];
     }
   }
@@ -54,7 +62,7 @@ export class ThoughtStorage {
       // Save to file with proper locking
       await saveThoughtsToFile(this.currentSessionFile, thoughtsWithIds, this.lockFile);
     } catch (error) {
-      logger.error('Error saving session:', error);
+      logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, 'Error saving session:');
       throw error;
     }
   }

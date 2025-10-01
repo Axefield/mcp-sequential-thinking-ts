@@ -147,17 +147,17 @@ export class ThoughtDataClass {
    */
   static fromDict(data: Record<string, any>): ThoughtDataClass {
     // Convert any camelCase keys to snake_case for internal processing
-    const normalizedData: Record<string, any> = {
-      thought: data.thought,
-      thoughtNumber: data.thoughtNumber ?? data.thought_number,
-      totalThoughts: data.totalThoughts ?? data.total_thoughts,
-      nextThoughtNeeded: data.nextThoughtNeeded ?? data.next_thought_needed,
-      stage: typeof data.stage === 'string' ? thoughtStageFromString(data.stage) : data.stage,
-      tags: data.tags ?? [],
-      axiomsUsed: data.axiomsUsed ?? data.axioms_used ?? [],
-      assumptionsChallenged: data.assumptionsChallenged ?? data.assumptions_challenged ?? [],
-      timestamp: data.timestamp ?? new Date().toISOString(),
-      id: data.id ?? uuidv4(),
+    const normalizedData = {
+      thought: data.thought as string,
+      thoughtNumber: (data.thoughtNumber ?? data.thought_number) as number,
+      totalThoughts: (data.totalThoughts ?? data.total_thoughts) as number,
+      nextThoughtNeeded: (data.nextThoughtNeeded ?? data.next_thought_needed) as boolean,
+      stage: (typeof data.stage === 'string' ? thoughtStageFromString(data.stage) : data.stage) as ThoughtStage,
+      tags: (data.tags ?? []) as string[],
+      axiomsUsed: (data.axiomsUsed ?? data.axioms_used ?? []) as string[],
+      assumptionsChallenged: (data.assumptionsChallenged ?? data.assumptions_challenged ?? []) as string[],
+      timestamp: (data.timestamp ?? new Date().toISOString()) as string,
+      id: (data.id ?? uuidv4()) as string,
     };
 
     return new ThoughtDataClass(normalizedData);

@@ -86,7 +86,7 @@ export async function loadThoughtsFromFile(filePath: string, lockFilePath: strin
     }
   } catch (error) {
     // Handle corrupted file
-    logger.error(`Error loading from ${filePath}:`, error);
+    logger.error({ error: error instanceof Error ? error : new Error(String(error)) }, `Error loading from ${filePath}:`);
     
     // Create backup of corrupted file
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');

@@ -13,6 +13,7 @@ describe('ThoughtStorage', () => {
     // Create a temporary directory for storage tests
     tempDir = await mkdtemp(join(tmpdir(), 'mcp-test-'));
     storage = new ThoughtStorage(tempDir);
+    await storage.initialize();
   });
 
   afterEach(async () => {

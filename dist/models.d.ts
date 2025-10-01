@@ -33,44 +33,44 @@ declare const ThoughtDataSchema: z.ZodEffects<z.ZodObject<{
     timestamp: z.ZodDefault<z.ZodString>;
     id: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    stage: ThoughtStage;
     thought: string;
     thoughtNumber: number;
     totalThoughts: number;
     nextThoughtNeeded: boolean;
-    stage: ThoughtStage;
     tags: string[];
     axiomsUsed: string[];
     assumptionsChallenged: string[];
     timestamp: string;
     id: string;
 }, {
+    stage: ThoughtStage;
     thought: string;
     thoughtNumber: number;
     totalThoughts: number;
     nextThoughtNeeded: boolean;
-    stage: ThoughtStage;
     tags?: string[] | undefined;
     axiomsUsed?: string[] | undefined;
     assumptionsChallenged?: string[] | undefined;
     timestamp?: string | undefined;
     id?: string | undefined;
 }>, {
+    stage: ThoughtStage;
     thought: string;
     thoughtNumber: number;
     totalThoughts: number;
     nextThoughtNeeded: boolean;
-    stage: ThoughtStage;
     tags: string[];
     axiomsUsed: string[];
     assumptionsChallenged: string[];
     timestamp: string;
     id: string;
 }, {
+    stage: ThoughtStage;
     thought: string;
     thoughtNumber: number;
     totalThoughts: number;
     nextThoughtNeeded: boolean;
-    stage: ThoughtStage;
     tags?: string[] | undefined;
     axiomsUsed?: string[] | undefined;
     assumptionsChallenged?: string[] | undefined;

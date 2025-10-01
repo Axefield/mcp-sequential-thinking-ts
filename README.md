@@ -367,17 +367,28 @@ Tests are written using Vitest and maintain 100% behavioral parity with the orig
    pnpm test --reporter=verbose
    ```
 
-## Migration from Python
+## Architecture & Design
 
-This TypeScript port maintains full API compatibility with the original Python implementation. Key differences:
+This TypeScript implementation is built with modern Node.js best practices and provides a robust, type-safe foundation for sequential thinking workflows:
 
-- **Type Safety**: Uses TypeScript and Zod instead of Pydantic
-- **File Locking**: Uses `proper-lockfile` instead of `portalocker`
-- **Logging**: Uses `pino` instead of Python's `logging` module
-- **Async/Await**: All I/O operations are asynchronous
-- **Package Management**: Uses `pnpm` instead of `uv`
-- **Enhanced CLI**: Better terminal experience with colors and progress indicators
-- **Improved Error Handling**: More descriptive error messages and recovery
+- **Type Safety**: Full TypeScript support with Zod runtime validation
+- **File Locking**: Thread-safe operations using `proper-lockfile`
+- **Structured Logging**: Comprehensive logging with `pino` and pretty formatting
+- **Async/Await**: All I/O operations are asynchronous for better performance
+- **Modern Tooling**: Built with `tsup`, `vitest`, `eslint`, and `prettier`
+- **Enhanced CLI**: Rich terminal experience with colors, progress indicators, and user-friendly output
+- **Robust Error Handling**: Comprehensive error handling with descriptive messages and recovery mechanisms
+- **MCP Integration**: Full Model Context Protocol support with `@modelcontextprotocol/sdk`
+
+## Acknowledgments
+
+This TypeScript implementation is based on the original Python version created by **Arben Ademi**.
+
+- **Original Author**: [Arben Ademi](https://github.com/arben-adm) <arben.ademi@tuta.io>
+- **Original Repository**: [mcp-sequential-thinking](https://github.com/arben-adm/mcp-sequential-thinking)
+- **TypeScript Port**: [Axefield](https://github.com/axefield)
+
+We thank Arben for creating the original concept and implementation that inspired this TypeScript port.
 
 ## License
 

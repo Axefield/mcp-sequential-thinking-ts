@@ -4,9 +4,9 @@
 
 A Model Context Protocol (MCP) server that facilitates structured, progressive thinking through defined stages. This tool helps break down complex problems into sequential thoughts, track the progression of your thinking process, and generate summaries.
 
-[![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
+[![Node Version](https://img.shields.io/badge/node-20%2B-green)](https://nodejs.org/downloads/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3%2B-blue)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 <a href="https://glama.ai/mcp/servers/m83dfy8feg"><img width="380" height="200" src="https://glama.ai/mcp/servers/m83dfy8feg/badge" alt="Sequential Thinking Server MCP server" /></a>
 
@@ -21,84 +21,82 @@ A Model Context Protocol (MCP) server that facilitates structured, progressive t
 - **Data Import/Export**: Share and reuse thinking sessions
 - **Extensible Architecture**: Easily customize and extend functionality
 - **Robust Error Handling**: Graceful handling of edge cases and corrupted data
-- **Type Safety**: Comprehensive type annotations and validation
+- **Type Safety**: Comprehensive type annotations and validation with Zod
 
 ## Prerequisites
 
-- Python 3.10 or higher
-- UV package manager ([Install Guide](https://github.com/astral-sh/uv))
+- Node.js 20 or higher
+- pnpm package manager ([Install Guide](https://pnpm.io/installation))
 
 ## Key Technologies
 
-- **Pydantic**: For data validation and serialization
-- **Portalocker**: For thread-safe file access
-- **FastMCP**: For Model Context Protocol integration
-- **Rich**: For enhanced console output
-- **PyYAML**: For configuration management
+- **Zod**: For data validation and serialization
+- **proper-lockfile**: For thread-safe file access
+- **@modelcontextprotocol/sdk**: For Model Context Protocol integration
+- **pino**: For structured logging
+- **yaml**: For configuration management
 
 ## Project Structure
 
 ```
 mcp-sequential-thinking/
-├── mcp_sequential_thinking/
-│   ├── server.py       # Main server implementation and MCP tools
-│   ├── models.py       # Data models with Pydantic validation
-│   ├── storage.py      # Thread-safe persistence layer
-│   ├── storage_utils.py # Shared utilities for storage operations
-│   ├── analysis.py     # Thought analysis and pattern detection
-│   ├── testing.py      # Test utilities and helper functions
-│   ├── utils.py        # Common utilities and helper functions
-│   ├── logging_conf.py # Centralized logging configuration
-│   └── __init__.py     # Package initialization
-├── tests/              
-│   ├── test_analysis.py # Tests for analysis functionality
-│   ├── test_models.py   # Tests for data models
-│   ├── test_storage.py  # Tests for persistence layer
-│   └── __init__.py
-├── run_server.py       # Server entry point script
-├── debug_mcp_connection.py # Utility for debugging connections
-├── README.md           # Main documentation
-├── CHANGELOG.md        # Version history and changes
-├── example.md          # Customization examples
-├── LICENSE             # MIT License
-└── pyproject.toml      # Project configuration and dependencies
+├── src/
+│   ├── server.ts            # Main server implementation and MCP tools
+│   ├── models.ts            # Data models with Zod validation
+│   ├── storage/
+│   │   ├── index.ts         # High-level storage API
+│   │   └── utils.ts         # Shared utilities for storage operations
+│   ├── analysis.ts          # Thought analysis and pattern detection
+│   ├── testing.ts           # Test utilities and helper functions
+│   ├── utils.ts             # Common utilities and helper functions
+│   └── logging.ts           # Centralized logging configuration
+├── bin/
+│   ├── run-server.ts        # CLI entry point
+│   └── debug-mcp.ts         # Debug tool for MCP connections
+├── tests/
+│   ├── analysis.spec.ts     # Tests for analysis functionality
+│   ├── models.spec.ts       # Tests for data models
+│   └── storage.spec.ts      # Tests for persistence layer
+├── package.json
+├── tsconfig.json
+├── tsconfig.build.json
+├── .eslintrc.cjs
+├── .prettierrc
+├── vitest.config.ts
+├── README.md
+├── CHANGELOG.md
+├── example.md
+└── LICENSE
 ```
 
 ## Quick Start
 
 1. **Set Up Project**
    ```bash
-   # Create and activate virtual environment
-   uv venv
-   .venv\Scripts\activate  # Windows
-   source .venv/bin/activate  # Unix
-
-   # Install package and dependencies
-   uv pip install -e .
+   # Install dependencies
+   pnpm install
 
    # For development with testing tools
-   uv pip install -e ".[dev]"
-
-   # For all optional dependencies
-   uv pip install -e ".[all]"
+   pnpm install
    ```
 
 2. **Run the Server**
    ```bash
-   # Run directly
-   uv run -m mcp_sequential_thinking.server
+   # Run in development mode
+   pnpm dev
 
-   # Or use the installed script
-   mcp-sequential-thinking
+   # Or build and run
+   pnpm build
+   node dist/bin/run-server.js
    ```
 
 3. **Run Tests**
    ```bash
    # Run all tests
-   pytest
+   pnpm test
 
-   # Run with coverage report
-   pytest --cov=mcp_sequential_thinking
+   # Run tests in watch mode
+   pnpm test:watch
    ```
 
 ## Claude Desktop Integration
@@ -109,56 +107,37 @@ Add to your Claude Desktop configuration (`%APPDATA%\Claude\claude_desktop_confi
 {
   "mcpServers": {
     "sequential-thinking": {
-      "command": "uv",
+      "command": "tsx",
       "args": [
-        "--directory",
-        "C:\\path\\to\\your\\mcp-sequential-thinking\\run_server.py",
-        "run",
-        "server.py"
-        ]
-      }
-    }
-  }
-```
-
-Alternatively, if you've installed the package with `pip install -e .`, you can use:
-
-```json
-{
-  "mcpServers": {
-    "sequential-thinking": {
-      "command": "mcp-sequential-thinking"
-    }
-  }
-}
-```
-
-You can also run it directly using uvx and skipping the installation step:
-
-```json
-{
-  "mcpServers": {
-    "sequential-thinking": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/arben-adm/mcp-sequential-thinking",
-        "--with",
-        "portalocker",
-        "mcp-sequential-thinking"
+        "bin/run-server.ts"
       ]
     }
   }
 }
 ```
 
-# How It Works
+Alternatively, if you've built the project, you can use:
 
-The server maintains a history of thoughts and processes them through a structured workflow. Each thought is validated using Pydantic models, categorized into thinking stages, and stored with relevant metadata in a thread-safe storage system. The server automatically handles data persistence, backup creation, and provides tools for analyzing relationships between thoughts.
+```json
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "node",
+      "args": [
+        "dist/bin/run-server.js"
+      ]
+    }
+  }
+}
+```
+
+## How It Works
+
+The server maintains a history of thoughts and processes them through a structured workflow. Each thought is validated using Zod schemas, categorized into thinking stages, and stored with relevant metadata in a thread-safe storage system. The server automatically handles data persistence, backup creation, and provides tools for analyzing relationships between thoughts.
 
 ## Usage Guide
 
-The Sequential Thinking server exposes three main tools:
+The Sequential Thinking server exposes five main tools:
 
 ### 1. `process_thought`
 
@@ -167,33 +146,33 @@ Records and analyzes a new thought in your sequential thinking process.
 **Parameters:**
 
 - `thought` (string): The content of your thought
-- `thought_number` (integer): Position in your sequence (e.g., 1 for first thought)
-- `total_thoughts` (integer): Expected total thoughts in the sequence
-- `next_thought_needed` (boolean): Whether more thoughts are needed after this one
+- `thoughtNumber` (number): Position in your sequence (e.g., 1 for first thought)
+- `totalThoughts` (number): Expected total thoughts in the sequence
+- `nextThoughtNeeded` (boolean): Whether more thoughts are needed after this one
 - `stage` (string): The thinking stage - must be one of:
   - "Problem Definition"
   - "Research"
   - "Analysis"
   - "Synthesis"
   - "Conclusion"
-- `tags` (list of strings, optional): Keywords or categories for your thought
-- `axioms_used` (list of strings, optional): Principles or axioms applied in your thought
-- `assumptions_challenged` (list of strings, optional): Assumptions your thought questions or challenges
+- `tags` (array of strings, optional): Keywords or categories for your thought
+- `axiomsUsed` (array of strings, optional): Principles or axioms applied in your thought
+- `assumptionsChallenged` (array of strings, optional): Assumptions your thought questions or challenges
 
 **Example:**
 
-```python
-# First thought in a 5-thought sequence
-process_thought(
-    thought="The problem of climate change requires analysis of multiple factors including emissions, policy, and technology adoption.",
-    thought_number=1,
-    total_thoughts=5,
-    next_thought_needed=True,
-    stage="Problem Definition",
-    tags=["climate", "global policy", "systems thinking"],
-    axioms_used=["Complex problems require multifaceted solutions"],
-    assumptions_challenged=["Technology alone can solve climate change"]
-)
+```typescript
+// First thought in a 5-thought sequence
+process_thought({
+  thought: "The problem of climate change requires analysis of multiple factors including emissions, policy, and technology adoption.",
+  thoughtNumber: 1,
+  totalThoughts: 5,
+  nextThoughtNeeded: true,
+  stage: "Problem Definition",
+  tags: ["climate", "global policy", "systems thinking"],
+  axiomsUsed: ["Complex problems require multifaceted solutions"],
+  assumptionsChallenged: ["Technology alone can solve climate change"]
+})
 ```
 
 ### 2. `generate_summary`
@@ -228,6 +207,20 @@ Generates a summary of your entire thinking process.
 
 Resets the thinking process by clearing all recorded thoughts.
 
+### 4. `export_session`
+
+Exports the current thinking session to a file.
+
+**Parameters:**
+- `filePath` (string): Path to save the exported session
+
+### 5. `import_session`
+
+Imports a thinking session from a file.
+
+**Parameters:**
+- `filePath` (string): Path to the file to import
+
 ## Practical Applications
 
 - **Decision Making**: Work through important decisions methodically
@@ -236,36 +229,41 @@ Resets the thinking process by clearing all recorded thoughts.
 - **Writing Organization**: Develop ideas progressively before writing
 - **Project Analysis**: Evaluate projects through defined analytical stages
 
+## Development
 
-## Getting Started
+### Scripts
 
-With the proper MCP setup, simply use the `process_thought` tool to begin working through your thoughts in sequence. As you progress, you can get an overview with `generate_summary` and reset when needed with `clear_history`.
+- `pnpm dev` - Run the server in development mode with hot reload
+- `pnpm build` - Build the project for production
+- `pnpm test` - Run the test suite
+- `pnpm test:watch` - Run tests in watch mode
+- `pnpm lint` - Run ESLint
+- `pnpm lint:fix` - Fix ESLint issues
+- `pnpm format` - Format code with Prettier
 
+### Type Safety
 
+This project uses TypeScript with strict type checking and Zod for runtime validation. All external inputs are validated at runtime, and types are inferred from Zod schemas for compile-time safety.
 
-# Customizing the Sequential Thinking Server
+### Testing
 
-For detailed examples of how to customize and extend the Sequential Thinking server, see [example.md](example.md). It includes code samples for:
+Tests are written using Vitest and maintain 100% behavioral parity with the original Python implementation. The test suite covers:
 
-- Modifying thinking stages
-- Enhancing thought data structures with Pydantic
-- Adding persistence with databases
-- Implementing enhanced analysis with NLP
-- Creating custom prompts
-- Setting up advanced configurations
-- Building web UI integrations
-- Implementing visualization tools
-- Connecting to external services
-- Creating collaborative environments
-- Separating test code
-- Building reusable utilities
+- Model validation and serialization
+- Storage operations with file locking
+- Analysis algorithms and pattern detection
+- MCP server tool implementations
 
+## Migration from Python
 
+This TypeScript port maintains full API compatibility with the original Python implementation. Key differences:
 
+- **Type Safety**: Uses TypeScript and Zod instead of Pydantic
+- **File Locking**: Uses `proper-lockfile` instead of `portalocker`
+- **Logging**: Uses `pino` instead of Python's `logging` module
+- **Async/Await**: All I/O operations are asynchronous
+- **Package Management**: Uses `pnpm` instead of `uv`
 
 ## License
 
 MIT License
-
-
-

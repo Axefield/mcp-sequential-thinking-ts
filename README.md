@@ -4,6 +4,8 @@
 
 A Model Context Protocol (MCP) server that facilitates structured, progressive thinking through defined stages. This tool helps break down complex problems into sequential thoughts, track the progression of your thinking process, and generate summaries.
 
+> **Version 0.3.0** - Complete TypeScript port with enhanced features, improved CLI, and comprehensive testing.
+
 [![Node Version](https://img.shields.io/badge/node-20%2B-green)](https://nodejs.org/downloads/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3%2B-blue)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -33,13 +35,17 @@ A Model Context Protocol (MCP) server that facilitates structured, progressive t
 - **Zod**: For data validation and serialization
 - **proper-lockfile**: For thread-safe file access
 - **@modelcontextprotocol/sdk**: For Model Context Protocol integration
-- **pino**: For structured logging
+- **pino**: For structured logging with pretty formatting
 - **yaml**: For configuration management
+- **uuid**: For unique identifier generation
+- **chalk**: For terminal styling and colors
+- **boxen**: For creating terminal boxes and borders
+- **ora**: For elegant terminal spinners
 
 ## Project Structure
 
 ```
-mcp-sequential-thinking/
+mcp-sequential-thinking-ts/
 ├── src/
 │   ├── server.ts            # Main server implementation and MCP tools
 │   ├── models.ts            # Data models with Zod validation
@@ -58,11 +64,11 @@ mcp-sequential-thinking/
 │   ├── models.spec.ts       # Tests for data models
 │   └── storage.spec.ts      # Tests for persistence layer
 ├── package.json
+├── package-lock.json
 ├── tsconfig.json
 ├── tsconfig.build.json
-├── .eslintrc.cjs
-├── .prettierrc
 ├── vitest.config.ts
+├── .gitignore
 ├── README.md
 ├── CHANGELOG.md
 ├── example.md
@@ -71,33 +77,69 @@ mcp-sequential-thinking/
 
 ## Quick Start
 
-1. **Set Up Project**
-   ```bash
-   # Install dependencies
-   pnpm install
+### Installation
 
-   # For development with testing tools
-   pnpm install
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-username/mcp-sequential-thinking-ts.git
+   cd mcp-sequential-thinking-ts
    ```
 
-2. **Run the Server**
+2. **Install Dependencies**
    ```bash
-   # Run in development mode
-   pnpm dev
+   # Using pnpm (recommended)
+   pnpm install
 
-   # Or build and run
+   # Or using npm
+   npm install
+
+   # Or using yarn
+   yarn install
+   ```
+
+3. **Build the Project**
+   ```bash
    pnpm build
+   ```
+
+### Running the Server
+
+1. **Development Mode**
+   ```bash
+   # Run with hot reload
+   pnpm dev
+   ```
+
+2. **Production Mode**
+   ```bash
+   # Build first
+   pnpm build
+   
+   # Then run
    node dist/bin/run-server.js
    ```
 
-3. **Run Tests**
+3. **Global Installation (Optional)**
    ```bash
-   # Run all tests
-   pnpm test
-
-   # Run tests in watch mode
-   pnpm test:watch
+   # Install globally for CLI access
+   npm install -g .
+   
+   # Then run from anywhere
+   mcp-sequential-thinking
    ```
+
+### Testing
+
+```bash
+# Run all tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test --coverage
+```
 
 ## Claude Desktop Integration
 
@@ -159,10 +201,10 @@ Records and analyzes a new thought in your sequential thinking process.
 - `axiomsUsed` (array of strings, optional): Principles or axioms applied in your thought
 - `assumptionsChallenged` (array of strings, optional): Assumptions your thought questions or challenges
 
-**Example:**
+**Examples:**
 
 ```typescript
-// First thought in a 5-thought sequence
+// Example 1: First thought in a 5-thought sequence
 process_thought({
   thought: "The problem of climate change requires analysis of multiple factors including emissions, policy, and technology adoption.",
   thoughtNumber: 1,
@@ -172,6 +214,30 @@ process_thought({
   tags: ["climate", "global policy", "systems thinking"],
   axiomsUsed: ["Complex problems require multifaceted solutions"],
   assumptionsChallenged: ["Technology alone can solve climate change"]
+})
+
+// Example 2: Research stage thought
+process_thought({
+  thought: "Recent studies show that renewable energy costs have dropped 85% in the last decade, making them competitive with fossil fuels.",
+  thoughtNumber: 2,
+  totalThoughts: 5,
+  nextThoughtNeeded: true,
+  stage: "Research",
+  tags: ["renewable energy", "cost analysis", "market trends"],
+  axiomsUsed: ["Economic viability drives adoption"],
+  assumptionsChallenged: ["Renewable energy is too expensive"]
+})
+
+// Example 3: Analysis stage thought
+process_thought({
+  thought: "The data suggests that policy intervention is necessary to accelerate the transition, as market forces alone are insufficient.",
+  thoughtNumber: 3,
+  totalThoughts: 5,
+  nextThoughtNeeded: true,
+  stage: "Analysis",
+  tags: ["policy analysis", "market failure", "intervention"],
+  axiomsUsed: ["Market failures require policy intervention"],
+  assumptionsChallenged: ["Free markets will solve environmental problems"]
 })
 ```
 
@@ -221,6 +287,21 @@ Imports a thinking session from a file.
 **Parameters:**
 - `filePath` (string): Path to the file to import
 
+## CLI Usage
+
+The server can also be used as a standalone CLI tool:
+
+```bash
+# Run the server directly
+npx tsx bin/run-server.ts
+
+# Or if installed globally
+mcp-sequential-thinking
+
+# Debug MCP connections
+npx tsx bin/debug-mcp.ts
+```
+
 ## Practical Applications
 
 - **Decision Making**: Work through important decisions methodically
@@ -228,18 +309,22 @@ Imports a thinking session from a file.
 - **Research Planning**: Structure your research approach with clear stages
 - **Writing Organization**: Develop ideas progressively before writing
 - **Project Analysis**: Evaluate projects through defined analytical stages
+- **Strategic Planning**: Organize business strategies through structured thinking
+- **Academic Research**: Structure research methodology and analysis
+- **Creative Problem Solving**: Apply systematic thinking to creative challenges
 
 ## Development
 
 ### Scripts
 
 - `pnpm dev` - Run the server in development mode with hot reload
-- `pnpm build` - Build the project for production
+- `pnpm build` - Build the project for production (ESM/CJS dual output)
 - `pnpm test` - Run the test suite
 - `pnpm test:watch` - Run tests in watch mode
 - `pnpm lint` - Run ESLint
-- `pnpm lint:fix` - Fix ESLint issues
+- `pnpm lint:fix` - Fix ESLint issues automatically
 - `pnpm format` - Format code with Prettier
+- `pnpm prepare` - Install Husky git hooks
 
 ### Type Safety
 
@@ -254,6 +339,34 @@ Tests are written using Vitest and maintain 100% behavioral parity with the orig
 - Analysis algorithms and pattern detection
 - MCP server tool implementations
 
+## Troubleshooting
+
+### Common Issues
+
+1. **MCP Connection Issues**
+   ```bash
+   # Use the debug tool to test connections
+   npx tsx bin/debug-mcp.ts
+   ```
+
+2. **Storage Permission Errors**
+   - Ensure the storage directory is writable
+   - Check file permissions on the data directory
+
+3. **TypeScript Build Errors**
+   ```bash
+   # Clean and rebuild
+   rm -rf dist node_modules
+   pnpm install
+   pnpm build
+   ```
+
+4. **Test Failures**
+   ```bash
+   # Run tests with verbose output
+   pnpm test --reporter=verbose
+   ```
+
 ## Migration from Python
 
 This TypeScript port maintains full API compatibility with the original Python implementation. Key differences:
@@ -263,6 +376,8 @@ This TypeScript port maintains full API compatibility with the original Python i
 - **Logging**: Uses `pino` instead of Python's `logging` module
 - **Async/Await**: All I/O operations are asynchronous
 - **Package Management**: Uses `pnpm` instead of `uv`
+- **Enhanced CLI**: Better terminal experience with colors and progress indicators
+- **Improved Error Handling**: More descriptive error messages and recovery
 
 ## License
 

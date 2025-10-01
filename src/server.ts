@@ -19,8 +19,8 @@ export class SequentialThinkingServer {
   constructor(storageDir?: string) {
     this.server = new Server(
       {
-        name: 'sequential-thinking',
-        version: '0.1.0',
+        name: 'sequential-thinking-ts-mcp',
+        version: '0.3.0',
       },
       {
         capabilities: {

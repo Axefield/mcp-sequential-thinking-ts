@@ -1,11 +1,11 @@
 {
-  "name": "mcp-sequential-thinking",
+  "name": "mcp-sequential-thinking-ts",
   "version": "0.3.0",
   "type": "module",
   "private": false,
-  "description": "A Sequential Thinking MCP Server for advanced problem solving",
+  "description": "A Sequential Thinking TypeScript MCP Server for advanced problem solving",
   "keywords": ["mcp", "ai", "problem-solving", "sequential-thinking", "typescript"],
-  "author": "Arben Ademi <arben.ademi@tuta.io>",
+  "author": "Original Python Version by Arben Ademi <arben.ademi@tuta.io> (https://github.com/arben-adm) | TypeScript Version by Axefield (https://github.com/axefield)",
   "license": "MIT",
   "scripts": {
     "dev": "tsx bin/run-server.ts",

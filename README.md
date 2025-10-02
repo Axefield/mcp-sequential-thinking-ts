@@ -1,4 +1,4 @@
-[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/arben-adm-mcp-sequential-thinking-badge.png)](https://mseep.ai/app/arben-adm-mcp-sequential-thinking)
+![Sequential Thinking MCP Server](axewuzhere_n.jpg)
 
 # Sequential Thinking MCP Server
 
@@ -10,7 +10,6 @@ A Model Context Protocol (MCP) server that facilitates structured, progressive t
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3%2B-blue)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<a href="https://glama.ai/mcp/servers/m83dfy8feg"><img width="380" height="200" src="https://glama.ai/mcp/servers/m83dfy8feg/badge" alt="Sequential Thinking Server MCP server" /></a>
 
 ## Features
 
@@ -36,11 +35,8 @@ A Model Context Protocol (MCP) server that facilitates structured, progressive t
 - **JSON**: For data storage and serialization
 - **proper-lockfile**: For thread-safe file access
 - **@modelcontextprotocol/sdk**: For Model Context Protocol integration
-- **pino**: For structured logging with pretty formatting
+- **pino + pino-pretty**: For structured logging with pretty formatting
 - **uuid**: For unique identifier generation
-- **chalk**: For terminal styling and colors
-- **boxen**: For creating terminal boxes and borders
-- **ora**: For elegant terminal spinners
 
 ## Project Structure
 
@@ -376,7 +372,7 @@ This TypeScript implementation is built with modern Node.js best practices and p
 - **Structured Logging**: Comprehensive logging with `pino` and pretty formatting
 - **Async/Await**: All I/O operations are asynchronous for better performance
 - **Modern Tooling**: Built with `tsup`, `vitest`, `eslint`, and `prettier`
-- **Enhanced CLI**: Rich terminal experience with colors, progress indicators, and user-friendly output
+- **Clean CLI**: Simple, focused command-line interface
 - **Robust Error Handling**: Comprehensive error handling with descriptive messages and recovery mechanisms
 - **MCP Integration**: Full Model Context Protocol support with `@modelcontextprotocol/sdk`
 
@@ -388,7 +384,7 @@ This TypeScript implementation is based on the original Python version created b
 - **Original Repository**: [mcp-sequential-thinking](https://github.com/arben-adm/mcp-sequential-thinking)
 - **TypeScript Port**: [Axefield](https://github.com/axefield)
 
-We thank Arben for creating the original concept and implementation that inspired this TypeScript port.
+"Axefield" thanks Arben for creating the original concept and implementation that inspired this TypeScript port.
 
 ## License
 
